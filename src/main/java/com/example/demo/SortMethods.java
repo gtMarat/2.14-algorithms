@@ -58,7 +58,7 @@ public class SortMethods {
         return measurementStartTime;
     }
 
-    public static Integer[] generateRandomIntegerArray(int i) {
+    public static Integer[] generateRandomIntegerArray(int length) {
         return generateRandomIntegerArray(100_000);
     }
 
@@ -81,6 +81,35 @@ public class SortMethods {
         arr[A] = arr[B];
         arr[B] = tmp;
     }
+
+    public static Integer[] quickSort(Integer[] arr, int begin, int end) {
+        Integer[] tmp = arr.clone();
+        quickSortRecursion(tmp, begin, end);
+        return tmp;
+    }
+
+    public static void quickSortRecursion(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
+            quickSortRecursion(arr, begin, partitionIndex - 1);
+            quickSortRecursion(arr, partitionIndex + 1, end);
+        }
+    }
+
+    private static int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                swapItems(arr, i, j);
+            }
+        }
+        swapItems(arr, i + 1, end);
+        return i + 1;
+    }
+
 
     public static Integer[] bubbleSortMethod(Integer[] arr) {
         Integer[] tmp = arr.clone();

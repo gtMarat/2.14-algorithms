@@ -2,12 +2,12 @@ package com.example.demo;
 
 import java.util.Arrays;
 
+import static com.example.demo.SortMethods.quickSort;
 import static com.example.demo.SortMethods.selectionSortMethod;
-import static java.util.Arrays.binarySearch;
 
 public class IntegerListImpl implements IntegerList {
 
-    private final Integer[] storage;
+    private Integer[] storage;
     private int size;
 
     public IntegerListImpl () {
@@ -22,7 +22,7 @@ public class IntegerListImpl implements IntegerList {
     @Override
 
     public Integer add(Integer item) {
-       validateSize();
+       growIfNeeded();
        validateItem(item);
         storage[size++] = item;
         return item;
@@ -30,7 +30,7 @@ public class IntegerListImpl implements IntegerList {
 
     @Override
     public Integer add(int index, Integer item) {
-        validateSize();
+        growIfNeeded();
         validateItem(item);
         validateIndex(index);
 
@@ -80,6 +80,10 @@ public class IntegerListImpl implements IntegerList {
     @Override
     public boolean contains(Integer item) {
         return binarySearch(selectionSortMethod(toArray()), item);
+    }
+
+    public Integer[] sort (Integer[]arr) {
+        return quickSort(arr, 0, arr.length - 1);
     }
 
     @Override
@@ -144,9 +148,9 @@ public class IntegerListImpl implements IntegerList {
         }
     }
 
-    private void validateSize() {
+    private void growIfNeeded() {
         if (size == storage.length) {
-            throw new StorageIsFullException();
+            grow();
         }
     }
 
@@ -170,5 +174,9 @@ public class IntegerListImpl implements IntegerList {
             }
         }
         return false;
+    }
+
+    private void grow() {
+        storage = Arrays.copyOf(storage, size + size / 2);
     }
 }
